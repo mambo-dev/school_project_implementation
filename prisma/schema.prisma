@@ -11,10 +11,12 @@ datasource db {
 }
 
 model Login {
-  Login_id       Int    @id @unique @default(autoincrement())
-  Login_username String @unique
+  Login_id       Int         @id @unique @default(autoincrement())
+  Login_username String      @unique
   User_password  String
   Login_role     Role
+  Freelancer     Freelancer?
+  Client         Client?
 }
 
 enum Role {
@@ -29,6 +31,8 @@ model Freelancer {
   freelancer_mobile    String
   freelancer_location  String
   freelancer_desc      String
+  freelancer_login     Login     @relation(fields: [freelancer_login_id], onDelete: Cascade, references: [Login_id])
+  freelancer_login_id  Int       @unique
   Bidding              Bidding[]
 }
 
@@ -39,6 +43,8 @@ model Client {
   client_mobile    String
   client_location  String
   client_desc      String
+  client_login     Login     @relation(fields: [client_login_id], onDelete: Cascade, references: [Login_id])
+  client_login_id  Int       @unique
   client_projects  Project[]
 }
 

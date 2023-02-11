@@ -9,6 +9,7 @@ type Input = {
   type: string;
   textArea?: boolean;
   name: string;
+  className?: string;
 };
 
 export default function TextInput({
@@ -18,10 +19,11 @@ export default function TextInput({
   type,
   textArea,
   name,
+  className,
 }: Input) {
   if (textArea) {
     return (
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full gap-y-2">
         <label className="text-sm text-teal-900 font-bold">{label}</label>
         <textarea
           name={name}
@@ -34,7 +36,7 @@ export default function TextInput({
   }
 
   return (
-    <div className="flex flex-col w-full">
+    <div className={`${className} flex flex-col w-full  gap-y-2`}>
       <label className="text-sm text-teal-900 font-bold">{label}</label>
       <input
         type={type}
