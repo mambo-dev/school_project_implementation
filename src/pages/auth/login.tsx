@@ -7,6 +7,8 @@ import Success from "../../../components/extras/success";
 import useForm from "../../../components/hooks/form";
 import Button from "../../../components/utils/button";
 import TextInput from "../../../components/utils/input";
+import axios from "axios";
+import { Error } from "../../../types/types";
 
 type LoginInitial = {
   username: string;
@@ -20,16 +22,36 @@ export default function Login() {
   const router = useRouter();
   function Login(values: LoginInitial) {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-    }, 1500);
+    axios
+      .post(`${process.env.NEXT_PUBLIC_URL}/api/auth/login`, {
+        username: values.username,
+        password: values.password,
+      })
+      .then((response) => {
+        setLoading(false);
+        const { data, error } = response.data;
 
-    console.log(values);
-    setTimeout(() => {
-      setSuccess(false);
-      setLoading(false);
-    }, 3000);
+        if (!data) {
+          setErrors([...error]);
+        } else {
+          setSuccess(true);
+          setErrors([]);
+          setTimeout(() => {
+            setSuccess(false);
+            data.role === "client"
+              ? router.push("/client/profile")
+              : router.push("/freelancer/profile");
+          }, 1000);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrors([
+          {
+            message: "unexpected error while loggin in",
+          },
+        ]);
+      });
   }
 
   const initialValues: LoginInitial = {

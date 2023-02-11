@@ -1,3 +1,4 @@
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,6 +10,7 @@ import useForm from "../../../components/hooks/form";
 import Button from "../../../components/utils/button";
 import TextInput from "../../../components/utils/input";
 import Radio from "../../../components/utils/radio";
+import { Error } from "../../../types/types";
 
 type SignUpInitial = {
   role: string;
@@ -24,16 +26,64 @@ export default function SignUp() {
   const router = useRouter();
   function signUp(values: SignUpInitial) {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-    }, 1500);
+    axios
+      .post(`${process.env.NEXT_PUBLIC_URL}/api/auth/signup`, {
+        ...values,
+      })
+      .then((response) => {
+        setLoading(false);
+        console.log(response);
+        if (!response.data.data) {
+          setErrors([...response.data.error]);
+        } else {
+          setSuccess(true);
 
-    console.log(values);
-    setTimeout(() => {
-      setSuccess(false);
-      setLoading(false);
-    }, 3000);
+          axios
+            .post(`${process.env.NEXT_PUBLIC_URL}/api/auth/login`, {
+              username: response.data.data.username,
+              password: values.password,
+            })
+            .then((response) => {
+              const { data, errors } = response.data;
+              if (!data) {
+                setErrors([
+                  {
+                    message:
+                      "unexpected error while loggin in  redirecting to login",
+                  },
+                ]);
+
+                setTimeout(() => {
+                  router.push("/auth/login");
+                }, 1000);
+              } else {
+                setTimeout(() => {
+                  setSuccess(false);
+                  data.role === "client"
+                    ? router.push("/client/profile")
+                    : router.push("/freelancer/profile");
+                }, 1000);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              setErrors([
+                {
+                  message:
+                    "unexpected error while loggin in go to login page and try from there apologies",
+                },
+              ]);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrors([
+          {
+            message: "unexpected error occured",
+          },
+        ]);
+      });
   }
 
   const initialValues: SignUpInitial = {

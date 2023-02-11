@@ -1,5 +1,5 @@
 import React from "react";
-import { Error } from "./types";
+import { Error } from "../../types/types";
 
 type ErrorProps = {
   errors: Error[];
@@ -7,12 +7,18 @@ type ErrorProps = {
 
 export default function ErrorMessage({ errors }: ErrorProps) {
   return (
-    <p
+    <ul
       className={`${
         errors.length < 0 && "hidden"
-      } font-bold text-sm text-red-500 m-auto mt-2`}
+      }  w-fit px-1 m-auto h-fit flex flex-col items-start justify-start list-disc gap-y-2  `}
     >
-      {errors.map((error: Error, index: number) => error.message)}
-    </p>
+      {errors.map((error: Error, index: number) => {
+        return (
+          <li key={index} className={`font-bold text-sm text-red-500  `}>
+            {error.message}
+          </li>
+        );
+      })}
+    </ul>
   );
 }

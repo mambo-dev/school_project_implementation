@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Login {
+  Login_id       Int    @id @unique @default(autoincrement())
+  Login_username String @unique
+  User_password  String
+  Login_role     Role
+}
+
+enum Role {
+  client
+  freelancer
+}
+
+model Freelancer {
+  freelancer_id        Int       @id @unique @default(autoincrement())
+  freelancer_full_name String
+  freelancer_email     String
+  freelancer_mobile    String
+  freelancer_location  String
+  freelancer_desc      String
+  Bidding              Bidding[]
+}
+
+model Client {
+  client_id        Int       @id @unique @default(autoincrement())
+  client_full_name String
+  client_email     String
+  client_mobile    String
+  client_location  String
+  client_desc      String
+  client_projects  Project[]
+}
+
+model Project {
+  project_id        Int                        @id @unique @default(autoincrement())
+  project_name      String
+  project_desc      String
+  project_date      String
+  project_client    Client?                    @relation(fields: [project_client_id], onDelete: Cascade, references: [client_id])
+  project_client_id Int?
+  project_cost      Int
+  project_bids      Bidding[]
+  project_review    Completed_projects_review?
+}
+
+model Bidding {
+  bidding_id               Int             @id @unique @default(autoincrement())
+  bidding_date             DateTime
+  bidding_Freelancer       Freelancer?     @relation(fields: [bidding_Freelancer_id], onDelete: Cascade, references: [freelancer_id])
+  bidding_Freelancer_id    Int?
+  bidding_project          Project?        @relation(fields: [bidding_project_id], onDelete: Cascade, references: [project_id])
+  bidding_project_id       Int?
+  bidding_desc             String
+  bidding_freelancer_price Int
+  bidding_accepted_bids    Accepted_bids[]
+}
+
+model Accepted_bids {
+  accepted_id              Int      @id @unique @default(autoincrement())
+  accepted_date            DateTime
+  accepted_bidding         Bidding? @relation(fields: [accepted_bidding_id], onDelete: Cascade, references: [bidding_id])
+  accepted_bidding_id      Int?
+  accepted_desc            String
+  accepted_freelance_price Int
+}
+
+model Completed_projects_review {
+  review_id         Int      @id @unique @default(autoincrement())
+  review_date       DateTime
+  review_project    Project  @relation(fields: [review_project_id], onDelete: Cascade, references: [project_id])
+  review_project_id Int      @unique
+  review_desc       String
+}
