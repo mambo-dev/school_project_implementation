@@ -40,7 +40,7 @@ export default function SignUp() {
 
           axios
             .post(`${process.env.NEXT_PUBLIC_URL}/api/auth/login`, {
-              username: response.data.data.username,
+              username: values.username,
               password: values.password,
             })
             .then((response) => {
@@ -78,6 +78,7 @@ export default function SignUp() {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
         setErrors([
           {
             message: "unexpected error occured",

@@ -4,7 +4,8 @@ import { checkUserExists } from "../../../../utils/user";
 import { handleLoginValidation } from "../../../../utils/validation";
 import * as argon2 from "argon2";
 import prisma from "../../../../lib/prisma";
-
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
 type Data = {
   username: string;
   role: string;
@@ -20,6 +21,7 @@ export default async function handler(
   res: NextApiResponse<Response>
 ) {
   const { username, password } = req.body;
+
   const { valid, errors } = handleLoginValidation(req.body);
 
   if (!valid) {
@@ -57,7 +59,25 @@ export default async function handler(
     });
   }
 
+  var access_token = jwt.sign(
+    { user_id: user.Login_id, username: user.Login_username },
+    `${process.env.JWT_SECRET}`,
+    {
+      expiresIn: "2h",
+    }
+  );
+
   //send cookie with jwt
+  res.setHeader(
+    "Set-Cookie",
+    cookie.serialize("access_token", access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      maxAge: 60 * 120,
+      sameSite: "strict",
+      path: "/",
+    })
+  );
 
   return res.status(200).json({
     data: { username: user.Login_username, role: user.Login_role },
