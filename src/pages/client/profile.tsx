@@ -63,6 +63,7 @@ export default function ProfilePage({ data }: any) {
         loading={loading}
         success={success}
         token={token}
+        type="client"
       />
     </div>
   );

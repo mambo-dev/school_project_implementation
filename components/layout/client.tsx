@@ -55,8 +55,8 @@ export default function Client({ children }: any) {
           />
         </div>
 
-        <nav className="w-fit px-1 flex gap-x-3">
-          <ul className=" flex gap-x-2 items-center text-slate-600">
+        <nav className="  w-fit px-1 md:flex gap-x-3">
+          <ul className="hidden  md:flex gap-x-2 items-center text-slate-600">
             {navigation.map((nav: ClientNav, index: number) => {
               return (
                 <Link href={nav.link} key={index}>
@@ -66,7 +66,7 @@ export default function Client({ children }: any) {
             })}
           </ul>
 
-          <MenuOptions profileLink="/client/profile" />
+          <MenuOptions profileLink="/client/profile" navLinks={navigation} />
         </nav>
       </header>
       {children}

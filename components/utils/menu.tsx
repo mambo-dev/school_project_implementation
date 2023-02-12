@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useAuth } from "../hooks/auth";
 
-export default function MenuOptions({ profileLink }: any) {
+export default function MenuOptions({ profileLink, navLinks }: any) {
   const { logout } = useAuth();
   return (
     <div className="   text-right">
@@ -46,7 +46,27 @@ export default function MenuOptions({ profileLink }: any) {
                   </Link>
                 )}
               </Menu.Item>
-
+              <div className="flex md:hidden flex-col">
+                {navLinks.map((link: any, index: number) => {
+                  return (
+                    <Menu.Item key={index}>
+                      {({ active }) => (
+                        <Link href={`${link.link}`}>
+                          <button
+                            className={`${
+                              active
+                                ? "bg-teal-500 text-white"
+                                : "text-gray-900"
+                            } group flex w-full items-center rounded px-2 py-2 text-sm`}
+                          >
+                            {link.name}
+                          </button>
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  );
+                })}
+              </div>
               <Menu.Item>
                 {({ active }) => (
                   <button
