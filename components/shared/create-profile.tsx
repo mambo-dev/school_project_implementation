@@ -7,9 +7,16 @@ import Select from "../utils/select";
 type Create = {
   initialState: any;
   submitAxios: (values: any) => void;
+  loading: boolean;
+  setErrors?: () => void;
 };
 
-export default function CreateProfile({ initialState, submitAxios }: Create) {
+export default function CreateProfile({
+  initialState,
+  submitAxios,
+  loading,
+  setErrors,
+}: Create) {
   const { values, handleChange, handleSubmit } = useForm(
     initialState,
     submitAxios
@@ -46,10 +53,10 @@ export default function CreateProfile({ initialState, submitAxios }: Create) {
             className="md:col-span-2"
           />
           <TextInput
-            label="number"
+            label="phone number"
             handleChange={handleChange}
-            value={values.number}
-            name="number"
+            value={values.mobile}
+            name="mobile"
             type="tel"
             className="md:col-span-1"
           />
@@ -75,7 +82,7 @@ export default function CreateProfile({ initialState, submitAxios }: Create) {
       </div>
       <div className="w-full   py-2 bg-slate-50  px-4 h-1/4">
         <div className="w-20 ml-auto">
-          <Button text="save " type="submit" />
+          <Button text="save " type="submit" loading={loading} />
         </div>
       </div>
     </form>
