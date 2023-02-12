@@ -6,13 +6,10 @@ import UpdateProfile from "./update-profile";
 type Display = {
   profile: any;
   type: string;
-  submitAxios: (value: any) => void;
+
+  token: string;
 };
-export default function DisplayProfile({
-  profile,
-  type,
-  submitAxios,
-}: Display) {
+export default function DisplayProfile({ profile, type, token }: Display) {
   const [open, setOpen] = useState(false);
   function transform(profile: any, type: string) {
     let transformed;
@@ -57,7 +54,7 @@ export default function DisplayProfile({
             <UpdateProfile
               profile={display_profile_data}
               type={type}
-              submitAxios={submitAxios}
+              token={token}
             />
           </SidePanel>
         </div>

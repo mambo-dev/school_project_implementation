@@ -107,7 +107,7 @@ export default function SignUp() {
         />
       </div>
 
-      <div className=" w-full px-2 md:px-5  lg:w-1/2 h-screen   py-2 md:py-14   lg:px-10 flex  flex-col items-center  gap-y-2">
+      <div className=" w-full px-2 md:px-5  lg:w-1/2 h-screen   py-28 md:py-14   lg:px-10 flex  flex-col items-center   gap-y-2">
         <div className="w-full flex flex-col items-center justify-center">
           <h1 className="text-teal-800 text-3xl font-semibold">
             Join us at Hiresume

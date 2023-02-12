@@ -46,6 +46,7 @@ export default function ProfilePage({ data }: any) {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
         setErrors([
           {
             message: "something unexpected happened try again later",
@@ -61,6 +62,7 @@ export default function ProfilePage({ data }: any) {
         error={errors}
         loading={loading}
         success={success}
+        token={token}
       />
     </div>
   );
