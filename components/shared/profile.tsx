@@ -45,7 +45,11 @@ export default function Profile({
         <Success message="profile created succesfully" success={success} />
       </div>
       {hasProfile ? (
-        <DisplayProfile />
+        <DisplayProfile
+          profile={hasProfile}
+          type="client"
+          submitAxios={createProfile}
+        />
       ) : (
         <CreateProfile
           initialState={initialState}
