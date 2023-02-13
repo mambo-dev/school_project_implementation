@@ -39,7 +39,7 @@ export default function Home({ data }: any) {
             a list of all projects you created since you joined us
           </p>
         </div>
-        <GetProjects projects={projects} />
+        <GetProjects token={token} projects={projects} />
       </div>
     </div>
   );
