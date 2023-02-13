@@ -7,8 +7,15 @@ type Side = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
   children: any;
+  span?: boolean;
 };
-export default function SidePanel({ open, setOpen, title, children }: Side) {
+export default function SidePanel({
+  open,
+  setOpen,
+  title,
+  children,
+  span,
+}: Side) {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -36,7 +43,11 @@ export default function SidePanel({ open, setOpen, title, children }: Side) {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-lg">
+                <Dialog.Panel
+                  className={`pointer-events-auto relative w-screen  ${
+                    span ? "max-w-2xl" : "max-w-lg"
+                  }`}
+                >
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
