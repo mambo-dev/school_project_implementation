@@ -39,7 +39,19 @@ export default function Home({ data }: any) {
             a list of all projects you created since you joined us
           </p>
         </div>
-        <GetProjects token={token} projects={projects} />
+        {projects && projects?.length <= 0 ? (
+          <div className="w-full flex items-center justify-center">
+            {" "}
+            <div className="w-64 border border-slate-300 shadow rounded py-2 px-1 text-slate-600 font-medium flex flex-col gap-y-2  ">
+              <p>you currently dont have projects start adding</p>
+              <div className="w-fit m-auto">
+                <Button text="new project" onClick={() => setOpen(true)} />
+              </div>
+            </div>{" "}
+          </div>
+        ) : (
+          <GetProjects token={token} projects={projects} />
+        )}
       </div>
     </div>
   );

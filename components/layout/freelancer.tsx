@@ -11,7 +11,7 @@ type ClientNav = {
 const navigation = [
   {
     name: "jobs",
-    link: "/client",
+    link: "/freelancer",
   },
   {
     name: "accepted bids",

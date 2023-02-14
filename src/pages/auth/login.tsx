@@ -46,6 +46,7 @@ export default function Login() {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
         setErrors([
           {
             message: "unexpected error while loggin in",
