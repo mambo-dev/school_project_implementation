@@ -63,13 +63,14 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
   const projects = await prisma.project.findMany({
     include: {
       project_client: true,
+      project_bids: true,
     },
   });
 
   return {
     props: {
       data: {
-        projects: projects,
+        projects: JSON.parse(JSON.stringify(projects)),
         token: access_token,
       },
     },

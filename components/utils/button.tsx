@@ -16,6 +16,7 @@ type ButtonType = {
   edit?: boolean;
   deleteBtn?: boolean;
   moreBtn?: boolean;
+  cancel?: boolean;
 };
 
 export default function Button({
@@ -27,7 +28,20 @@ export default function Button({
   deleteBtn,
   moreBtn,
   AdditionalHtml,
+  cancel,
 }: ButtonType) {
+  if (cancel) {
+    return (
+      <button
+        type={type}
+        onClick={onClick}
+        className=" bg-transparent border border-slate-400 rounded py-2 px-4 text-slate-700   "
+      >
+        cancel
+      </button>
+    );
+  }
+
   if (edit) {
     return (
       <button

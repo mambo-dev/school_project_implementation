@@ -11,7 +11,7 @@ export default function SearchProjects({ token }: any) {
     if (debouncedSearch) {
       axios
         .get(
-          `${process.env.NEXT_PUBLIC_LINK}/projects/search-jobs?query=${query}`,
+          `${process.env.NEXT_PUBLIC_URL}/api/project/search-project/search?query=${query}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -19,8 +19,8 @@ export default function SearchProjects({ token }: any) {
           }
         )
         .then((response) => {
-          setProjects(response.data);
-          console.log(response.data);
+          setProjects(response.data.data);
+          console.log(response.data.data);
         })
         .catch((error) => {
           console.log(error);
@@ -55,8 +55,8 @@ export default function SearchProjects({ token }: any) {
       </div>
       {query.length > 0 && (
         <div className=" w-full  m-auto grid grid-cols-1 gap-3 py-2 h-full ">
-          {projects.map((project: any, index: number) => (
-            <Project key={index} project={project} />
+          {projects?.map((project: any, index: number) => (
+            <Project token={token} key={index} project={project} />
           ))}
         </div>
       )}
