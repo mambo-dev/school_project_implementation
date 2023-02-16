@@ -43,7 +43,7 @@ export default async function handler(
 
   const signup = await prisma.login.create({
     data: {
-      User_password: hash_password,
+      Login_password: hash_password,
       Login_role: role,
       Login_username: username,
     },
