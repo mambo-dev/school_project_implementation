@@ -13,7 +13,7 @@ import Select from "../utils/select";
 type Update = {
   profile: any;
   type: string;
-  token: string;
+  token: string | null;
 };
 export default function UpdateProfile({ profile, type, token }: Update) {
   const [loading, setLoading] = useState(false);

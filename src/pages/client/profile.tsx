@@ -10,10 +10,15 @@ import { useRouter } from "next/router";
 
 type Data = {
   profile: any | null;
+  user: any | null;
   token: string | null;
 };
-export default function ProfilePage({ data }: any) {
-  const { profile, token } = data;
+
+type ProfilePage = {
+  data: Data;
+};
+export default function ProfilePage({ data }: ProfilePage) {
+  const { profile, token, user } = data;
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Error[]>([]);
@@ -64,6 +69,7 @@ export default function ProfilePage({ data }: any) {
         success={success}
         token={token}
         type="client"
+        user={user}
       />
     </div>
   );
@@ -95,6 +101,12 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     };
   }
 
+  let user = await prisma.login.findUnique({
+    where: {
+      Login_id: decodedToken.user_id,
+    },
+  });
+
   const profile = await prisma.client.findUnique({
     where: {
       client_login_id: decodedToken.user_id,
@@ -105,6 +117,7 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     props: {
       data: {
         profile,
+        user,
         token: access_token,
       },
     },

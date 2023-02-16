@@ -6,10 +6,15 @@ import UpdateProfile from "./update-profile";
 type Display = {
   profile: any;
   type: string;
-
-  token: string;
+  user: any;
+  token: string | null;
 };
-export default function DisplayProfile({ profile, type, token }: Display) {
+export default function DisplayProfile({
+  profile,
+  type,
+  token,
+  user,
+}: Display) {
   const [open, setOpen] = useState(false);
   function transform(profile: any, type: string) {
     let transformed;
@@ -38,7 +43,11 @@ export default function DisplayProfile({ profile, type, token }: Display) {
   const display_profile_data = transform(profile, type);
 
   return (
-    <div className="flex-1 relative w-full md:w-[70%]  bg-white mb-auto shadow rounded border border-slate-300 flex flex-col ">
+    <div
+      className={`flex-1 relative w-full  ${
+        user.Login_role === "freelancer" && "md:w-[70%] "
+      }   bg-white mb-auto shadow rounded border border-slate-300 flex flex-col `}
+    >
       <div className="px-2 py-5 sm:px-4 flex items-center justify-between">
         <div>
           <h3 className="text-lg font-medium leading-6 text-gray-900">
@@ -48,16 +57,18 @@ export default function DisplayProfile({ profile, type, token }: Display) {
             Personal details.
           </p>
         </div>
-        <div className="w-20">
-          <Button text="update" onClick={() => setOpen(true)} />
-          <SidePanel open={open} title="update profile" setOpen={setOpen}>
-            <UpdateProfile
-              profile={display_profile_data}
-              type={type}
-              token={token}
-            />
-          </SidePanel>
-        </div>
+        {user.Login_role === "freelancer" && (
+          <div className="w-20">
+            <Button text="update" onClick={() => setOpen(true)} />
+            <SidePanel open={open} title="update profile" setOpen={setOpen}>
+              <UpdateProfile
+                profile={display_profile_data}
+                type={type}
+                token={token}
+              />
+            </SidePanel>
+          </div>
+        )}
       </div>
       <div className="border-t border-slate-300">
         <dl>

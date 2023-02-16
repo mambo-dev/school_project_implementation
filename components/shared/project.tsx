@@ -68,7 +68,7 @@ export default function Project({ project, token }: Props) {
           >
             <EllipsisVerticalIcon className="w-5 h-5 font-semibold" />
           </button>
-          <Modal isOpen={more} setIsOpen={setMore} title="project">
+          <Modal isOpen={more} setIsOpen={setMore} title="project" span>
             <FullProject project={project} />
           </Modal>
         </div>

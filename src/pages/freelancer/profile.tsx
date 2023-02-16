@@ -10,10 +10,11 @@ import axios from "axios";
 
 type Data = {
   profile: any | null;
+  user: any | null;
   token: string | null;
 };
 export default function ProfilePage({ data }: any) {
-  const { profile, token } = data;
+  const { profile, token, user } = data;
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Error[]>([]);
@@ -63,6 +64,7 @@ export default function ProfilePage({ data }: any) {
         loading={loading}
         success={success}
         token={token}
+        user={user}
         type="freelancer"
       />
     </div>
@@ -101,10 +103,17 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     },
   });
 
+  let user = await prisma.login.findUnique({
+    where: {
+      Login_id: decodedToken.user_id,
+    },
+  });
+
   return {
     props: {
       data: {
         profile,
+        user,
         token: access_token,
       },
     },

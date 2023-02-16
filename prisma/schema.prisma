@@ -14,7 +14,7 @@ datasource db {
 model Login {
   Login_id       Int         @id @unique @default(autoincrement())
   Login_username String      @unique
-  User_password  String
+  Login_password String
   Login_role     Role
   Freelancer     Freelancer?
   Client         Client?
@@ -77,7 +77,7 @@ model Accepted_bids {
   accepted_id              Int      @id @unique @default(autoincrement())
   accepted_date            DateTime
   accepted_bidding         Bidding? @relation(fields: [accepted_bidding_id], onDelete: Cascade, references: [bidding_id])
-  accepted_bidding_id      Int?
+  accepted_bidding_id      Int      @unique
   accepted_desc            String
   accepted_freelance_price Int
 }

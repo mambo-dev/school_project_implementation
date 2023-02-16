@@ -13,8 +13,9 @@ type CreateProfile = {
   error: Error[];
   loading: boolean;
   success: boolean;
-  token: string;
+  token: string | null;
   type: string;
+  user: any;
 };
 
 export default function Profile({
@@ -25,6 +26,7 @@ export default function Profile({
   success,
   token,
   type,
+  user,
 }: CreateProfile) {
   const initialState = {
     firstName: "",
@@ -49,7 +51,12 @@ export default function Profile({
         <Success message="profile created succesfully" success={success} />
       </div>
       {hasProfile ? (
-        <DisplayProfile profile={hasProfile} type={type} token={token} />
+        <DisplayProfile
+          profile={hasProfile}
+          type={type}
+          token={token}
+          user={user}
+        />
       ) : (
         <CreateProfile
           initialState={initialState}

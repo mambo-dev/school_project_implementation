@@ -89,13 +89,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     include: {
       project_client: true,
+      project_bids: {
+        include: {
+          bidding_Freelancer: true,
+        },
+      },
     },
   });
 
   return {
     props: {
       data: {
-        projects: projects,
+        projects: JSON.parse(JSON.stringify(projects)),
         token: access_token,
       },
     },

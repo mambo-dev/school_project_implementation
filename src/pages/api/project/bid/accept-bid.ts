@@ -48,7 +48,7 @@ export default async function handler(
     `${req.headers.authorization?.split(" ")[1]}`
   );
 
-  const { description, date, bid_id } = req.body;
+  const { bid_id } = req.body;
   const findUser = await prisma.login.findUniqueOrThrow({
     where: {
       Login_id: decodedToken.user_id,
@@ -88,8 +88,8 @@ export default async function handler(
 
   const accepted_bids = await prisma.accepted_bids.create({
     data: {
-      accepted_date: date,
-      accepted_desc: description,
+      accepted_date: findBid.bidding_date,
+      accepted_desc: findBid.bidding_desc,
       accepted_bidding: {
         connect: {
           bidding_id: findBid.bidding_id,
