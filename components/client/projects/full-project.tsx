@@ -8,7 +8,6 @@ type Props = {
 };
 
 export default function FullProject({ project }: Props) {
-  console.log(project);
   return (
     <div className="w-full flex flex-col ">
       <span className="flex py-2 text-slate-600 font-medium">

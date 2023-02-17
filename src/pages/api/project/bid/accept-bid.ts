@@ -95,7 +95,11 @@ export default async function handler(
           bidding_id: findBid.bidding_id,
         },
       },
-
+      accepted_by: {
+        connect: {
+          client_id: findUser.Client?.client_id,
+        },
+      },
       accepted_freelance_price: findBid.bidding_freelancer_price,
     },
   });
