@@ -8,9 +8,16 @@ import { DecodedToken } from "../../../types/types";
 import jwt_decode from "jwt-decode";
 import prisma from "../../../lib/prisma";
 import GetProjects from "../../../components/client/projects/get-projects";
+import {
+  Bidding,
+  Client as ClientType,
+  Freelancer,
+  Project,
+  Role,
+} from "@prisma/client";
 
 export default function Home({ data }: any) {
-  const { token, projects } = data;
+  const { token, projects, user } = data;
 
   const [open, setOpen] = useState(false);
   return (
@@ -50,14 +57,30 @@ export default function Home({ data }: any) {
             </div>{" "}
           </div>
         ) : (
-          <GetProjects token={token} projects={projects} />
+          <GetProjects token={token} projects={projects} user={user} />
         )}
       </div>
     </div>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+type Data = {
+  projects: (Project & {
+    project_bids: (Bidding & {
+      bidding_Freelancer: Freelancer | null;
+    })[];
+    project_client: ClientType | null;
+  })[];
+  token: string;
+  user: {
+    Login_username: string;
+    Login_role: Role;
+  } | null;
+};
+
+export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
+  context
+) => {
   const { req } = context;
 
   const access_token = req.cookies.access_token;
@@ -81,6 +104,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const user = await prisma.login.findUnique({
+    where: {
+      Login_id: decodedToken.user_id,
+    },
+    select: {
+      Login_username: true,
+      Login_password: false,
+      Login_role: true,
+    },
+  });
+
   const projects = await prisma.project.findMany({
     where: {
       project_client: {
@@ -102,6 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       data: {
         projects: JSON.parse(JSON.stringify(projects)),
         token: access_token,
+        user,
       },
     },
   };

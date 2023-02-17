@@ -86,6 +86,23 @@ export default async function handler(
     });
   }
 
+  const bid_already_accepted = await prisma.accepted_bids.findUnique({
+    where: {
+      accepted_bidding_id: findBid.bidding_id,
+    },
+  });
+
+  if (bid_already_accepted) {
+    return res.status(404).json({
+      data: null,
+      error: [
+        {
+          message: "bid has already been accepted",
+        },
+      ],
+    });
+  }
+
   const accepted_bids = await prisma.accepted_bids.create({
     data: {
       accepted_date: findBid.bidding_date,

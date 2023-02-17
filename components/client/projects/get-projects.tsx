@@ -1,4 +1,6 @@
+import { Role } from "@prisma/client";
 import React, { useState } from "react";
+import { addCommas } from "../../../src/pages/client/bids";
 import Button from "../../utils/button";
 import Modal from "../../utils/modal";
 import DeleteProject from "./delete-project";
@@ -8,9 +10,13 @@ import FullProject from "./full-project";
 type ProjectsProps = {
   projects: any[];
   token: string;
+  user: {
+    Login_username: string;
+    Login_role: Role;
+  } | null;
 };
 
-export default function GetProjects({ projects, token }: ProjectsProps) {
+export default function GetProjects({ projects, token, user }: ProjectsProps) {
   const [edit, setEdit] = useState(false);
   const [deleteProject, setDeleteProject] = useState(false);
   const [more, setMore] = useState(false);
@@ -60,7 +66,9 @@ export default function GetProjects({ projects, token }: ProjectsProps) {
                   {" "}
                   {truncate(project.project_desc, 40)}{" "}
                 </td>
-                <td className=" py-4">{project.project_cost} ksh </td>
+                <td className=" py-4">
+                  {addCommas(project.project_cost)} ksh{" "}
+                </td>
                 <td className=" py-4"> {project.project_date}</td>
                 <td className=" py-4  px-2 ">
                   <Button
@@ -115,7 +123,7 @@ export default function GetProjects({ projects, token }: ProjectsProps) {
                     setIsOpen={setMore}
                     title="about project"
                   >
-                    <FullProject project={project} />
+                    <FullProject project={project} user={user} />
                   </Modal>
                 </td>
               </tr>

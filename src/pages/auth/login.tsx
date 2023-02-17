@@ -39,8 +39,8 @@ export default function Login() {
           setTimeout(() => {
             setSuccess(false);
             data.role === "client"
-              ? router.push("/client/profile")
-              : router.push("/freelancer/profile");
+              ? router.push("/client")
+              : router.push("/freelancer");
           }, 1000);
         }
       })

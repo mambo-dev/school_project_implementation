@@ -22,7 +22,7 @@ export default function Bid({ data }: BidProps) {
   const { token, bids } = data;
   return (
     <div className="w-full py-10 px-2">
-      <div className="m-auto w-full md:w-1/2 ">
+      <div className="m-auto w-full md:w-1/2 flex flex-col gap-y-3">
         {bids?.map((bid) => (
           <Disclosure key={bid.accepted_id}>
             {({ open }) => (
@@ -38,11 +38,16 @@ export default function Bid({ data }: BidProps) {
                         className="rounded-full "
                       />
                     </span>
-                    <span>
-                      {
-                        bid.accepted_bidding?.bidding_Freelancer
-                          ?.freelancer_full_name
-                      }
+                    <span className="flex  flex-1 items-center gap-x-4  ">
+                      <span>
+                        {
+                          bid.accepted_bidding?.bidding_Freelancer
+                            ?.freelancer_full_name
+                        }
+                      </span>
+                      <span className="border  border-slate-300 bg-white rounded-full py-1 px-2  text-slate-900 font-bold text-xs ">
+                        {addCommas(bid.accepted_freelance_price)} ksh
+                      </span>
                     </span>
                   </span>
                   <ChevronUpIcon
@@ -52,9 +57,7 @@ export default function Bid({ data }: BidProps) {
                   />
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                  If you&apos;re unhappy with your purchase for any reason,
-                  email us within 90 days and we&apos;ll refund you in full, no
-                  questions asked.
+                  {bid.accepted_desc}
                 </Disclosure.Panel>
               </>
             )}
@@ -141,3 +144,7 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 Bid.getLayout = function getLayout(page: ReactElement) {
   return <Client>{page}</Client>;
 };
+
+export function addCommas(num: number | undefined) {
+  return num?.toLocaleString();
+}

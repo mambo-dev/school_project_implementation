@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { useRouter } from "next/router";
 
 import React, { useState } from "react";
+import { addCommas } from "../../src/pages/client/bids";
 import { Error } from "../../types/types";
 import ErrorMessage from "../extras/error";
 import Success from "../extras/success";
@@ -46,18 +47,20 @@ export default function DisplayBid({ bid, token }: DisplayBid) {
         } else {
           setSuccess(true);
           setTimeout(() => {
-            router.reload();
+            router.push("/client/bids");
           }, 500);
         }
       })
       .catch((error: any) => {
         console.log(error);
         setLoading(false);
-        setErrors([
-          {
-            message: "something unexpected happened try again later",
-          },
-        ]);
+        error.response.data.error?.length > 0
+          ? setErrors([...error.response.data.error])
+          : setErrors([
+              {
+                message: "something unexpected happened try again later",
+              },
+            ]);
       });
   }
   console.log(bid);
@@ -103,7 +106,7 @@ export default function DisplayBid({ bid, token }: DisplayBid) {
               willing to work for
             </dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {bid?.bidding_freelancer_price}
+              {addCommas(bid?.bidding_freelancer_price)}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -115,7 +118,12 @@ export default function DisplayBid({ bid, token }: DisplayBid) {
               >
                 {loading ? "loading..." : "accept"}
               </button>
-              <button className="focus:ring-2 ring-red-300 ring-offset-1 bg-red-400 w-24 rounded  py-2 px-1 inline-flex items-center justify-center">
+              <button
+                onClick={() => {
+                  router.replace("/client");
+                }}
+                className="focus:ring-2 ring-red-300 ring-offset-1 bg-red-400 w-24 rounded  py-2 px-1 inline-flex items-center justify-center"
+              >
                 reject
               </button>
             </dd>

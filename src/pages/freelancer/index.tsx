@@ -1,3 +1,4 @@
+import { Role } from "@prisma/client";
 import jwtDecode from "jwt-decode";
 import { GetServerSideProps } from "next";
 import React, { ReactElement } from "react";
@@ -9,11 +10,11 @@ import prisma from "../../../lib/prisma";
 import { DecodedToken } from "../../../types/types";
 
 export default function Home({ data }: any) {
-  const { projects, token } = data;
-  console.log(projects);
+  const { projects, token, user } = data;
+
   const tabs = {
     all: {
-      component: <Projects projects={projects} token={token} />,
+      component: <Projects projects={projects} token={token} user={user} />,
     },
     search: {
       component: <SearchProjects token={token} />,
@@ -32,6 +33,10 @@ export default function Home({ data }: any) {
 type Data = {
   projects: any[] | null;
   token: string | null;
+  user: {
+    Login_username: string;
+    Login_role: Role;
+  } | null;
 };
 
 export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
@@ -67,11 +72,23 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     },
   });
 
+  const user = await prisma.login.findUnique({
+    where: {
+      Login_id: decodedToken.user_id,
+    },
+    select: {
+      Login_username: true,
+      Login_password: false,
+      Login_role: true,
+    },
+  });
+
   return {
     props: {
       data: {
         projects: JSON.parse(JSON.stringify(projects)),
         token: access_token,
+        user,
       },
     },
   };

@@ -1,5 +1,7 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { Bidding, Client, Freelancer, Project, Role } from "@prisma/client";
 import React, { useState } from "react";
+import { addCommas } from "../../src/pages/client/bids";
 import FullProject from "../client/projects/full-project";
 import { truncate } from "../client/projects/get-projects";
 import Bid from "../freelancer/projects/bid";
@@ -10,11 +12,16 @@ import SidePanel from "../utils/side-panel";
 type Props = {
   project: any;
   token: string;
+  user: {
+    Login_username: string;
+    Login_role: Role;
+  } | null;
 };
 
-export default function Project({ project, token }: Props) {
+export default function Project({ project, token, user }: Props) {
   const [bid, setBid] = useState(false);
   const [more, setMore] = useState(false);
+  const [currentProject, setCurrentProject] = useState({});
   return (
     <div className="w-full shadow rounded border border-slate-300 py-2 px-1 text-slate-800 flex gap-y-2 flex-col">
       <div className="flex items-center justify-between ">
@@ -22,7 +29,7 @@ export default function Project({ project, token }: Props) {
           {project.project_name}
         </h3>
         <span className="border  border-slate-300 bg-gray-100 rounded-full py-1 px-2  text-slate-900 font-bold text-xs ">
-          {project.project_cost} ksh
+          {addCommas(project.project_cost)} ksh
         </span>
       </div>
       <div className="flex items-center justify-between ">
@@ -63,13 +70,17 @@ export default function Project({ project, token }: Props) {
         </div>
         <div className="w-fit px-1">
           <button
-            onClick={() => setMore(true)}
+            onClick={() => {
+              setMore(true);
+              setCurrentProject(project);
+            }}
             className="w-fit py-2 px-3 rounded inline-flex items-center justify-center gap-x-2 bg-transparent text-slate-700 focus:border focus:border-slate-500 focus:bg-slate-100 focus:ring-1 ring-offset-0 ring-slate-200 font-medium"
           >
             <EllipsisVerticalIcon className="w-5 h-5 font-semibold" />
           </button>
           <Modal isOpen={more} setIsOpen={setMore} title="project" span>
-            <FullProject project={project} />
+            {/*@ts-ignore*/}
+            <FullProject project={currentProject} user={user} />
           </Modal>
         </div>
       </div>
