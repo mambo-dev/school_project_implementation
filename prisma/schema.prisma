@@ -38,15 +38,16 @@ model Freelancer {
 }
 
 model Client {
-  client_id        Int       @id @unique @default(autoincrement())
+  client_id        Int            @id @unique @default(autoincrement())
   client_full_name String
   client_email     String
   client_mobile    String
   client_location  String
   client_desc      String
-  client_login     Login     @relation(fields: [client_login_id], onDelete: Cascade, references: [Login_id])
-  client_login_id  Int       @unique
+  client_login     Login          @relation(fields: [client_login_id], onDelete: Cascade, references: [Login_id])
+  client_login_id  Int            @unique
   client_projects  Project[]
+  Accepted_bids    Accepted_bids?
 }
 
 model Project {
@@ -80,6 +81,8 @@ model Accepted_bids {
   accepted_bidding_id      Int      @unique
   accepted_desc            String
   accepted_freelance_price Int
+  accepted_by              Client?  @relation(fields: [accepted_by_id], onDelete: Cascade, references: [client_id])
+  accepted_by_id           Int      @unique
 }
 
 model Completed_projects_review {

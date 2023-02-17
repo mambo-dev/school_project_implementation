@@ -21,7 +21,7 @@ export default function FullProject({ project }: Props) {
       </span>
       <span className="flex flex-col  py-2 text-slate-600 font-medium gap-x-2 ">
         <span className="text-slate-900 font-semibold">bids: </span>{" "}
-        <ul>
+        <ul className="flex flex-col gap-y-3">
           {project.project_bids.map((bids: any, index: number) => {
             return (
               <li
