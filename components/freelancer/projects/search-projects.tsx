@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import useDebounce from "../../hooks/debounce";
 import Project from "../../shared/project";
 
-export default function SearchProjects({ token }: any) {
+export default function SearchProjects({ token, user }: any) {
   const [query, setQuery] = useState("");
   const [projects, setProjects] = useState([]);
   const debouncedSearch = useDebounce(query, 500);
@@ -56,7 +56,7 @@ export default function SearchProjects({ token }: any) {
       {query.length > 0 && (
         <div className=" w-full  m-auto grid grid-cols-1 gap-3 py-2 h-full ">
           {projects?.map((project: any, index: number) => (
-            <Project token={token} key={index} project={project} />
+            <Project token={token} key={index} project={project} user={user} />
           ))}
         </div>
       )}

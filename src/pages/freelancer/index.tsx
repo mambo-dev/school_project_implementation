@@ -17,7 +17,7 @@ export default function Home({ data }: any) {
       component: <Projects projects={projects} token={token} user={user} />,
     },
     search: {
-      component: <SearchProjects token={token} />,
+      component: <SearchProjects token={token} user={user} />,
     },
   };
 
