@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import ReportProjects from "../../../components/client/reports/projects";
 import ReportFreelancerProjects from "../../../components/freelancer/reports/freelancer-reports";
 import Client from "../../../components/layout/client";
+import Freelancer from "../../../components/layout/freelancer";
 import prisma from "../../../lib/prisma";
 import { DecodedToken } from "../../../types/types";
 import { ReportNav } from "../client/reports";
@@ -44,7 +45,9 @@ export default function FreelancerReports({ data }: Props) {
       </div>
       <div className="mb-auto col-span-6 md:col-span-5 ">
         <div className="shadow rounded border border-slate-100">
-          {page === "projects" && <ReportFreelancerProjects user={user} />}
+          {page === "projects" && (
+            <ReportFreelancerProjects user={user} bids={bids} />
+          )}
         </div>
       </div>
     </div>
@@ -53,6 +56,13 @@ export default function FreelancerReports({ data }: Props) {
 
 type Data = {
   bids: (Bidding & {
+    bidding_accepted_bids: (Accepted_bids & {
+      accepted_bidding: {
+        bidding_Freelancer: {
+          freelancer_login_id: number;
+        } | null;
+      } | null;
+    })[];
     bidding_project:
       | (Project & {
           project_bids: {
@@ -61,6 +71,7 @@ type Data = {
         })
       | null;
   })[];
+
   user: Login | null;
   token: string | null;
 };
@@ -123,6 +134,21 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
           },
         },
       },
+      bidding_accepted_bids: {
+        include: {
+          accepted_bidding: {
+            select: {
+              bidding_date: false,
+              bidding_Freelancer: {
+                select: {
+                  freelancer_login_id: true,
+                  freelancer_email: false,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -130,7 +156,6 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     props: {
       data: {
         user,
-
         bids: JSON.parse(JSON.stringify(bids)),
         token: access_token,
       },
@@ -139,5 +164,5 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 };
 
 FreelancerReports.getLayout = function getLayout(page: React.ReactElement) {
-  return <Client>{page}</Client>;
+  return <Freelancer>{page}</Freelancer>;
 };

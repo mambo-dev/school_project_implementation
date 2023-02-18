@@ -66,6 +66,9 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
   }
 
   const projects = await prisma.project.findMany({
+    orderBy: {
+      project_cost: "desc",
+    },
     include: {
       project_client: true,
       project_bids: true,

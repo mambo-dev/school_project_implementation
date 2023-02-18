@@ -101,6 +101,9 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     where: {
       freelancer_login_id: decodedToken.user_id,
     },
+    include: {
+      freelancer_login: true,
+    },
   });
 
   let user = await prisma.login.findUnique({

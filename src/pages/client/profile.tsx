@@ -107,9 +107,28 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     },
   });
 
+  if (user?.Login_role !== "client") {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
+    };
+  }
+
   const profile = await prisma.client.findUnique({
     where: {
       client_login_id: decodedToken.user_id,
+    },
+    include: {
+      client_login: {
+        select: {
+          Login_id: true,
+          Login_password: false,
+          Login_role: true,
+          Login_username: true,
+        },
+      },
     },
   });
 

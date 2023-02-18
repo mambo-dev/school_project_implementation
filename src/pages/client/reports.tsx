@@ -135,6 +135,14 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
       Login_password: false,
     },
   });
+  if (user?.Login_role !== "client") {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
+    };
+  }
 
   let projects = await prisma.project.findMany({
     where: {

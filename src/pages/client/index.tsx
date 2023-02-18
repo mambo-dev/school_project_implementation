@@ -18,7 +18,7 @@ import {
 
 export default function Home({ data }: any) {
   const { token, projects, user } = data;
-
+  console.log(user);
   const [open, setOpen] = useState(false);
   return (
     <div className="w-full h-full flex items-center flex-col">
@@ -115,11 +115,23 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     },
   });
 
+  if (user?.Login_role !== "client") {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
+    };
+  }
+
   const projects = await prisma.project.findMany({
     where: {
       project_client: {
         client_login_id: decodedToken.user_id,
       },
+    },
+    orderBy: {
+      project_date: "asc",
     },
     include: {
       project_client: true,

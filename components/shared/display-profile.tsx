@@ -16,6 +16,7 @@ export default function DisplayProfile({
   user,
 }: Display) {
   const [open, setOpen] = useState(false);
+  console.log(profile);
   function transform(profile: any, type: string) {
     let transformed;
     if (type === "client") {
@@ -26,6 +27,7 @@ export default function DisplayProfile({
         mobile: profile.client_mobile,
         description: profile.client_desc,
         location: profile.client_location,
+        login_id: profile.client_login.Login_id,
       };
     } else {
       transformed = {
@@ -35,13 +37,14 @@ export default function DisplayProfile({
         mobile: profile.freelancer_mobile,
         description: profile.freelancer_desc,
         location: profile.freelancer_location,
+        login_id: profile.freelancer_login_id,
       };
     }
 
     return transformed;
   }
   const display_profile_data = transform(profile, type);
-
+  console.log(display_profile_data.login_id);
   return (
     <div
       className={`flex-1 relative w-full  ${
@@ -57,7 +60,7 @@ export default function DisplayProfile({
             Personal details.
           </p>
         </div>
-        {user.Login_role === "freelancer" && (
+        {user.Login_id === display_profile_data.login_id && (
           <div className="w-20">
             <Button text="update" onClick={() => setOpen(true)} />
             <SidePanel open={open} title="update profile" setOpen={setOpen}>
