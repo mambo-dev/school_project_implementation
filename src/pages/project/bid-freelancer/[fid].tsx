@@ -28,14 +28,14 @@ type BidPage = {
 export default function BidPage({ data }: BidPage) {
   const { bid, profile, token, user } = data;
   return (
-    <div className="flex py-2 flex-col md:flex-row ">
-      <div className="w-full md:w-1/2 m-auto flex flex-col px-2 py-2 gap-y-3">
+    <div className="py-2 grid grid-cols-1 md:grid-cols-2 gap-2  ">
+      <div className="w-full h-full mb-auto flex flex-col px-2 py-2 gap-y-3">
         <h1 className="font-medium text-slate-500 text-xl m-auto">
           freelancer bid pitch{" "}
         </h1>
         <DisplayBid bid={bid} token={token} />
       </div>
-      <div className="w-full md:w-1/2 m-auto flex flex-col px-2 py-2 gap-y-3">
+      <div className="w-full mb-auto flex flex-col px-2 py-2 gap-y-3">
         <h1 className="font-medium text-slate-500 text-xl m-auto">
           {" "}
           freelancer bidding profile{" "}

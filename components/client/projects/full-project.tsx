@@ -2,7 +2,8 @@ import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { Bidding, Client, Freelancer, Project, Role } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import Loading from "../../extras/loading";
 
 type Props = {
   project: Project & {
@@ -18,6 +19,8 @@ type Props = {
 };
 
 export default function FullProject({ project, user }: Props) {
+  const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState<any>();
   return (
     <div className="w-full flex flex-col ">
       <span className="flex py-2 text-slate-600 font-medium">
@@ -62,8 +65,22 @@ export default function FullProject({ project, user }: Props) {
                     <Link
                       href={`/project/bid-freelancer/${bids.bidding_Freelancer_id}?bid_id=${bids.bidding_id}`}
                     >
-                      <button className="w-fit text-blue-500 hover:text-blue-600">
-                        <ArrowUpRightIcon className="w-7 h-7" />
+                      <button
+                        onClick={() => {
+                          setLoading(true);
+                          setSelected(bids.bidding_id);
+                        }}
+                        className="w-fit text-blue-500 hover:text-blue-600"
+                      >
+                        {loading ? (
+                          bids.bidding_id === selected ? (
+                            <Loading borderColor="border-blue-500" />
+                          ) : (
+                            <ArrowUpRightIcon className="w-7 h-7" />
+                          )
+                        ) : (
+                          <ArrowUpRightIcon className="w-7 h-7" />
+                        )}
                       </button>
                     </Link>
                   </li>

@@ -24,24 +24,24 @@ export default function GetProjects({ projects, token, user }: ProjectsProps) {
   return (
     <div className="overflow-x-auto w-full rounded shadow border border-slate-300">
       <table className="w-full h-full  ">
-        <thead className="text-slate-600 py-10 bg-slate-100  h-14">
-          <tr className=" text-left">
-            <th scope="col" className="px-2 border-r">
+        <thead className="text-slate-600 py-10 bg-slate-100 border-b border-slate-300 shadow h-14">
+          <tr className=" text-left py-2">
+            <th scope="col" className="px-2 ">
               name
             </th>
-            <th scope="col" className="px-2 border-r">
+            <th scope="col" className="px-2 ">
               desription
             </th>
-            <th scope="col" className="px-2 border-r">
+            <th scope="col" className="px-2 ">
               date
             </th>
-            <th scope="col" className="px-2 border-r">
+            <th scope="col" className="px-2 ">
               cost
             </th>
-            <th scope="col" className="px-2 border-r">
+            <th scope="col" className="px-2 ">
               edit
             </th>
-            <th scope="col" className="px-2 border-r">
+            <th scope="col" className="px-2 ">
               delete
             </th>
             <th scope="col" className="px-2">
@@ -66,10 +66,11 @@ export default function GetProjects({ projects, token, user }: ProjectsProps) {
                   {" "}
                   {truncate(project.project_desc, 40)}{" "}
                 </td>
+
+                <td className=" py-4"> {project.project_date}</td>
                 <td className=" py-4">
                   {addCommas(project.project_cost)} ksh{" "}
                 </td>
-                <td className=" py-4"> {project.project_date}</td>
                 <td className=" py-4  px-2 ">
                   <Button
                     text="edit"
@@ -85,7 +86,7 @@ export default function GetProjects({ projects, token, user }: ProjectsProps) {
                     setIsOpen={setEdit}
                     title="edit project"
                   >
-                    <EditProject project={currentProject} token={token} />
+                    <EditProject project={project} token={token} />
                   </Modal>
                 </td>
                 <td className=" py-4  px-2 ">
@@ -123,7 +124,7 @@ export default function GetProjects({ projects, token, user }: ProjectsProps) {
                     setIsOpen={setMore}
                     title="about project"
                   >
-                    <FullProject project={project} user={user} />
+                    <FullProject project={currentProject} user={user} />
                   </Modal>
                 </td>
               </tr>

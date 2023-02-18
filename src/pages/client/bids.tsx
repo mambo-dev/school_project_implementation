@@ -10,6 +10,7 @@ import {
 import jwtDecode from "jwt-decode";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { ReactElement } from "react";
 import Client from "../../../components/layout/client";
 import prisma from "../../../lib/prisma";
@@ -19,6 +20,7 @@ type BidProps = {
   data: Data;
 };
 export default function Bid({ data }: BidProps) {
+  const router = useRouter();
   const { token, bids } = data;
   return (
     <div className="w-full py-10 px-2">
@@ -45,6 +47,10 @@ export default function Bid({ data }: BidProps) {
                             ?.freelancer_full_name
                         }
                       </span>
+
+                      <span>
+                        {bid.accepted_bidding?.bidding_project?.project_name}
+                      </span>
                       <span className="border  border-slate-300 bg-white rounded-full py-1 px-2  text-slate-900 font-bold text-xs ">
                         {addCommas(bid.accepted_freelance_price)} ksh
                       </span>
@@ -56,8 +62,14 @@ export default function Bid({ data }: BidProps) {
                     } h-5 w-5 text-slate-500`}
                   />
                 </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                  {bid.accepted_desc}
+                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500 flex flex-col gap-y-2">
+                  <span> {bid.accepted_desc}</span>
+                  <button
+                    onClick={() => {}}
+                    className="focus:ring-2 ml-auto hover:bg-red-500  focus:bg-red-500 hover:ring-1 font-medium text-white ring-red-300 ring-offset-1 bg-red-400 w-24 rounded  py-2 px-1 inline-flex items-center justify-center"
+                  >
+                    reverse
+                  </button>
                 </Disclosure.Panel>
               </>
             )}
@@ -74,6 +86,7 @@ type Data = {
         accepted_by: ClientType | null;
         accepted_bidding: {
           bidding_Freelancer: Freelancer | null;
+          bidding_project: Project | null;
         } | null;
       })[]
     | null;
@@ -118,19 +131,20 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     },
     include: {
       accepted_by: true,
+
       accepted_bidding: {
         select: {
           bidding_Freelancer: true,
           bidding_desc: false,
           bidding_accepted_bids: false,
           bidding_freelancer_price: false,
-          bidding_project: false,
+          bidding_project: true,
           bidding_date: false,
         },
       },
     },
   });
-  console.log(bids);
+
   return {
     props: {
       data: {
