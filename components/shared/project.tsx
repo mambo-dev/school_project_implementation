@@ -18,7 +18,7 @@ type Props = {
   } | null;
 };
 
-export default function Project({ project, token, user }: Props) {
+export default function ProjectDiv({ project, token, user }: Props) {
   const [bid, setBid] = useState(false);
   const [more, setMore] = useState(false);
   const [currentProject, setCurrentProject] = useState({});

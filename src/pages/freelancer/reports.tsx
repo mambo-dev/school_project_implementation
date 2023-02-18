@@ -1,47 +1,27 @@
-import {
-  BuildingOfficeIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/24/outline";
-import {
-  Accepted_bids,
-  Bidding,
-  Client as ClientType,
-  Login,
-  Project,
-  Role,
-} from "@prisma/client";
+import { BuildingOfficeIcon } from "@heroicons/react/24/outline";
+import { Accepted_bids, Bidding, Login, Project } from "@prisma/client";
 import jwtDecode from "jwt-decode";
 import { GetServerSideProps } from "next";
 import React, { useState } from "react";
-import ReportBids from "../../../components/client/reports/bids";
-import Bids from "../../../components/client/reports/bids";
 import ReportProjects from "../../../components/client/reports/projects";
-
+import ReportFreelancerProjects from "../../../components/freelancer/reports/freelancer-reports";
 import Client from "../../../components/layout/client";
 import prisma from "../../../lib/prisma";
 import { DecodedToken } from "../../../types/types";
+import { ReportNav } from "../client/reports";
 
 type Props = {
   data: Data;
 };
 
-export type ReportNav = {
-  name: string;
-  icon: any;
-};
-
-export default function Reports({ data }: Props) {
+export default function FreelancerReports({ data }: Props) {
   const [page, setPage] = useState("projects");
-  const { bids, projects, token, user } = data;
-  console.log(projects);
+  const { bids, user, token } = data;
+
   const reports: ReportNav[] = [
     {
       name: "projects",
       icon: <BuildingOfficeIcon className="w-4 h-4" />,
-    },
-    {
-      name: "accepted bids",
-      icon: <CheckCircleIcon className="w-4 h-4" />,
     },
   ];
   return (
@@ -64,11 +44,7 @@ export default function Reports({ data }: Props) {
       </div>
       <div className="mb-auto col-span-6 md:col-span-5 ">
         <div className="shadow rounded border border-slate-100">
-          {page === "projects" ? (
-            <ReportProjects clientProjects={projects} user={user} />
-          ) : (
-            <ReportBids acceptedBids={bids} user={user} />
-          )}
+          {page === "projects" && <ReportFreelancerProjects user={user} />}
         </div>
       </div>
     </div>
@@ -76,27 +52,19 @@ export default function Reports({ data }: Props) {
 }
 
 type Data = {
-  reports: any[];
-  user: {
-    Login_id: number;
-    Login_username: string;
-    Login_role: Role;
-  } | null;
-  token: string | null;
-  projects: Project[];
-  bids: {
-    accepted_id: number;
-    accepted_date: Date;
-    accepted_desc: string;
-    accepted_freelance_price: number;
-    accepted_by: ClientType | null;
-    accepted_bidding:
-      | (Bidding & {
-          bidding_project: Project | null;
+  bids: (Bidding & {
+    bidding_project:
+      | (Project & {
+          project_bids: {
+            bidding_accepted_bids: Accepted_bids[];
+          }[];
         })
       | null;
-  }[];
+  })[];
+  user: Login | null;
+  token: string | null;
 };
+
 //@ts-ignore
 export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
   context
@@ -136,44 +104,25 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     },
   });
 
-  let projects = await prisma.project.findMany({
+  let bids = await prisma.bidding.findMany({
     where: {
-      project_client: {
-        client_login: {
+      bidding_Freelancer: {
+        freelancer_login: {
           Login_id: user?.Login_id,
         },
       },
     },
-    select: {
-      project_cost: true,
-      project_date: true,
-      project_id: true,
-      project_desc: true,
-      project_name: true,
-      project_client_id: false,
-    },
-  });
-  let bids = await prisma.accepted_bids.findMany({
-    where: {
-      accepted_by: {
-        client_login: {
-          Login_id: user?.Login_id,
-        },
-      },
-    },
-    select: {
-      accepted_id: true,
-      accepted_date: true,
-      accepted_desc: true,
-      accepted_freelance_price: true,
-      accepted_bidding_id: false,
-      accepted_by_id: false,
-      accepted_bidding: {
+    include: {
+      bidding_project: {
         include: {
-          bidding_project: true,
+          project_bids: {
+            select: {
+              bidding_accepted_bids: true,
+              bidding_project_id: false,
+            },
+          },
         },
       },
-      accepted_by: true,
     },
   });
 
@@ -181,7 +130,7 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
     props: {
       data: {
         user,
-        projects: JSON.parse(JSON.stringify(projects)),
+
         bids: JSON.parse(JSON.stringify(bids)),
         token: access_token,
       },
@@ -189,6 +138,6 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
   };
 };
 
-Reports.getLayout = function getLayout(page: React.ReactElement) {
+FreelancerReports.getLayout = function getLayout(page: React.ReactElement) {
   return <Client>{page}</Client>;
 };

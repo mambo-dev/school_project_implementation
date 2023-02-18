@@ -1,6 +1,6 @@
 import { Role } from "@prisma/client";
 import React from "react";
-import Project from "../../shared/project";
+import ProjectDiv from "../../shared/project";
 
 type Props = {
   projects: any;
@@ -15,7 +15,7 @@ export default function Projects({ projects, token, user }: Props) {
   return (
     <div className="w-full flex flex-col gap-y-2 ">
       {projects.map((project: any, index: number) => (
-        <Project token={token} key={index} project={project} user={user} />
+        <ProjectDiv token={token} key={index} project={project} user={user} />
       ))}
     </div>
   );
