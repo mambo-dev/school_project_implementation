@@ -1,5 +1,12 @@
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { Bidding, Client, Freelancer, Project, Role } from "@prisma/client";
+import {
+  Bidding,
+  Client,
+  Completed_projects_review,
+  Freelancer,
+  Project,
+  Role,
+} from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -11,6 +18,7 @@ type Props = {
       bidding_Freelancer: Freelancer | null;
     })[];
     project_client: Client | null;
+    project_review: Completed_projects_review | null;
   };
   user: {
     Login_username: string;
@@ -22,7 +30,13 @@ export default function FullProject({ project, user }: Props) {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<any>();
   return (
-    <div className="w-full flex flex-col ">
+    <div className="w-full flex flex-col  ">
+      <Link href={`/client/review/${project.project_id}`}>
+        <span className="text-blue-400 hover:underline ml-auto w-fit  absolute top-6 right-2 bottom-0">
+          review
+        </span>
+      </Link>
+
       <span className="flex py-2 text-slate-600 font-medium">
         <span className="text-slate-900 font-semibold">name: </span>{" "}
         {project.project_name}

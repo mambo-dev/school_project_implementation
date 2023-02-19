@@ -53,7 +53,7 @@ export default function Modal({
               <Dialog.Panel
                 className={`w-full"" ${
                   span ? "max-w-2xl" : "max-w-md"
-                } max-w-md transform overflow-hidden rounded bg-white p-6 text-left align-middle shadow-xl transition-all`}
+                } max-w-md relative transform overflow-hidden rounded bg-white p-6 text-left align-middle shadow-xl transition-all`}
               >
                 <Dialog.Title
                   as="h3"

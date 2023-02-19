@@ -11,6 +11,7 @@ import GetProjects from "../../../components/client/projects/get-projects";
 import {
   Bidding,
   Client as ClientType,
+  Completed_projects_review,
   Freelancer,
   Project,
   Role,
@@ -18,7 +19,7 @@ import {
 
 export default function Home({ data }: any) {
   const { token, projects, user } = data;
-  console.log(user);
+
   const [open, setOpen] = useState(false);
   return (
     <div className="w-full h-full flex items-center flex-col">
@@ -70,6 +71,7 @@ type Data = {
       bidding_Freelancer: Freelancer | null;
     })[];
     project_client: ClientType | null;
+    project_review: Completed_projects_review | null;
   })[];
   token: string;
   user: {
@@ -140,6 +142,7 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
           bidding_Freelancer: true,
         },
       },
+      project_review: true,
     },
   });
 

@@ -21,6 +21,7 @@ export default function GetProjects({ projects, token, user }: ProjectsProps) {
   const [deleteProject, setDeleteProject] = useState(false);
   const [more, setMore] = useState(false);
   const [currentProject, setCurrentProject] = useState<any>({});
+  console.log(projects[0].project_review);
   return (
     <div className="overflow-x-auto w-full rounded shadow border border-slate-300">
       <table className="w-full h-full  ">
@@ -37,6 +38,9 @@ export default function GetProjects({ projects, token, user }: ProjectsProps) {
             </th>
             <th scope="col" className="px-2 ">
               cost
+            </th>
+            <th scope="col" className="px-2 ">
+              status
             </th>
             <th scope="col" className="px-2 ">
               edit
@@ -70,6 +74,17 @@ export default function GetProjects({ projects, token, user }: ProjectsProps) {
                 <td className=" py-4"> {project.project_date}</td>
                 <td className=" py-4">
                   {addCommas(project.project_cost)} ksh{" "}
+                </td>
+                <td className=" py-4">
+                  {project.project_review ? (
+                    <span className="border  border-green-300 bg-green-400 rounded-full py-2 px-3  text-white font-bold text-xs ">
+                      complete
+                    </span>
+                  ) : (
+                    <span className="border  border-yellow-300 bg-yellow-400 rounded-full py-2 px-3  text-white font-bold text-xs ">
+                      on going
+                    </span>
+                  )}
                 </td>
                 <td className=" py-4  px-2 ">
                   <Button
