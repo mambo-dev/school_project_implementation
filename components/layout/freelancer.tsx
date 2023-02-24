@@ -13,10 +13,7 @@ const navigation = [
     name: "jobs",
     link: "/freelancer",
   },
-  {
-    name: "accepted bids",
-    link: "/freelancer/bids",
-  },
+
   {
     name: "reports",
     link: "/freelancer/reports",

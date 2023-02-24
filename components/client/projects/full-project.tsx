@@ -32,7 +32,7 @@ export default function FullProject({ project, user }: Props) {
   return (
     <div className="w-full flex flex-col  ">
       <Link href={`/client/review/${project.project_id}`}>
-        <span className="text-blue-400 hover:underline ml-auto w-fit  absolute top-6 right-2 bottom-0">
+        <span className="text-blue-400 hover:underline ml-auto w-fit   top-6 right-2 bottom-0">
           review
         </span>
       </Link>
